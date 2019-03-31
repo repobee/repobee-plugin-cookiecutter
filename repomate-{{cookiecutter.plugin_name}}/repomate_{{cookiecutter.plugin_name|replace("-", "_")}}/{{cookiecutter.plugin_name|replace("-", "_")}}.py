@@ -24,11 +24,12 @@ class ExamplePlugin(plug.Plugin):
     """Example plugin that implements the act_on_cloned_repo hook."""
 
     def act_on_cloned_repo(self,
-                           path: Union[str, pathlib.Path]) -> plug.HookResult:
+                           path: Union[str, pathlib.Path], api) -> plug.HookResult:
         """List all files in a cloned repo.
         
         Args:
             path: Path to the student repo.
+            api: An instance of :py:class:`repomate.github_api.GitHubAPI`.
         Returns:
             a plug.HookResult specifying the outcome.
         """
@@ -43,11 +44,12 @@ class ExamplePlugin(plug.Plugin):
 
 
 @plug.repomate_hook
-def act_on_cloned_repo(path: Union[str, pathlib.Path]) -> plug.HookResult:
+def act_on_cloned_repo(path: Union[str, pathlib.Path], api) -> plug.HookResult:
     """Return an error hookresult with a garbage message.
     
     Args:
         path: Path to the student repo.
+            api: An instance of :py:class:`repomate.github_api.GitHubAPI`.
     Returns:
         a plug.HookResult specifying the outcome.
     """
