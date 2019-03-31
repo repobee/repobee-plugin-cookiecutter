@@ -15,7 +15,7 @@ import os
 from typing import Union
 
 # this import you'll need
-import repomate_plug as plug
+import repobee_plug as plug
 
 PLUGIN_NAME = '{{cookiecutter.plugin_name}}'
 
@@ -29,7 +29,7 @@ class ExamplePlugin(plug.Plugin):
         
         Args:
             path: Path to the student repo.
-            api: An instance of :py:class:`repomate.github_api.GitHubAPI`.
+            api: An instance of :py:class:`repobee.github_api.GitHubAPI`.
         Returns:
             a plug.HookResult specifying the outcome.
         """
@@ -43,13 +43,13 @@ class ExamplePlugin(plug.Plugin):
             hook=PLUGIN_NAME, status=plug.Status.SUCCESS, msg=output)
 
 
-@plug.repomate_hook
+@plug.repobee_hook
 def act_on_cloned_repo(path: Union[str, pathlib.Path], api) -> plug.HookResult:
     """Return an error hookresult with a garbage message.
     
     Args:
         path: Path to the student repo.
-            api: An instance of :py:class:`repomate.github_api.GitHubAPI`.
+            api: An instance of :py:class:`repobee.github_api.GitHubAPI`.
     Returns:
         a plug.HookResult specifying the outcome.
     """

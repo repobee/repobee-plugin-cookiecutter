@@ -1,6 +1,6 @@
-# repomate-plugin-cookiecutter
+# repobee-plugin-cookiecutter
 This is a simple `cookiecutter` template for
-[repomate](https://github.com/slarse/repomate) plugins. It should provide you
+[RepoBee](https://github.com/repobee/repobee) plugins. It should provide you
 with everything you need to quickly write a plugin.
 
 ## Requirements
@@ -10,7 +10,7 @@ so you can install it with `pip install cookiecutter` (or whichever variation
 works for you).
 
 ## Quick-use
-1. Execute `python3 -m cookicutter gh:slarse/repomate-plugin-cookiecutter`
+1. Execute `python3 -m cookicutter gh:repobee/repobee-plugin-cookiecutter`
 2. Complete the setup.
 3. That's all there is to it! You should now have a directory called
-   `repomate-<plugin_name>` in the current working directory.
+   `repobee-<plugin_name>` in the current working directory.

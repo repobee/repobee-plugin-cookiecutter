@@ -1,4 +1,4 @@
-# repomate-{{cookiecutter.plugin_name}}
+# repobee-{{cookiecutter.plugin_name}}
 {{cookiecutter.short_description}}
 
 # License

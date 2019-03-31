@@ -5,16 +5,16 @@ with open("README.md", mode="r", encoding="utf-8") as f:
     readme = f.read()
 
 # parse the version instead of importing it to avoid dependency-related crashes
-with open("repomate_{{cookiecutter.plugin_name|replace('-', '_')}}/__version.py", mode="r", encoding="utf-8") as f:
+with open("repobee_{{cookiecutter.plugin_name|replace('-', '_')}}/__version.py", mode="r", encoding="utf-8") as f:
     line = f.readline()
     __version__ = line.split("=")[1].strip(" '\"\n")
     assert re.match(r"^\d+(\.\d+){2}$", __version__)
 
-test_requirements = ["pytest", "repomate"]
-required = ["repomate-plug"]
+test_requirements = ["pytest", "repobee"]
+required = ["repobee-plug"]
 
 setup(
-    name="repomate-{{cookiecutter.plugin_name}}",
+    name="repobee-{{cookiecutter.plugin_name}}",
     version=__version__,
     description="{{cookiecutter.short_description}}",
     long_description=readme,
@@ -23,10 +23,10 @@ setup(
     author_email="{{cookiecutter.email}}",
     url="https://github.com/"
     "{{cookiecutter.github_username}}"
-    "/repomate-{{cookiecutter.plugin_name}}",
+    "/repobee-{{cookiecutter.plugin_name}}",
     download_url="https://github.com/"
     "{{cookiecutter.github_username}}"
-    "/repomate-{{cookiecutter.plugin_name}}"
+    "/repobee-{{cookiecutter.plugin_name}}"
     "/archive/v{}.tar.gz".format(__version__),
     license="MIT",
     packages=find_packages(exclude=("tests", "docs")),
