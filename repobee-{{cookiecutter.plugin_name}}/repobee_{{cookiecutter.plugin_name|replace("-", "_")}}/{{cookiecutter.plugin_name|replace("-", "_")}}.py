@@ -17,14 +17,15 @@ from typing import Union
 # this import you'll need
 import repobee_plug as plug
 
-PLUGIN_NAME = '{{cookiecutter.plugin_name}}'
+PLUGIN_NAME = "{{cookiecutter.plugin_name}}"
 
 
 class ExamplePlugin(plug.Plugin):
     """Example plugin that implements the act_on_cloned_repo hook."""
 
-    def act_on_cloned_repo(self,
-                           path: Union[str, pathlib.Path], api) -> plug.HookResult:
+    def act_on_cloned_repo(
+        self, path: Union[str, pathlib.Path], api
+    ) -> plug.HookResult:
         """List all files in a cloned repo.
         
         Args:
@@ -35,12 +36,12 @@ class ExamplePlugin(plug.Plugin):
         """
         path = pathlib.Path(path)
         filepaths = [
-            str(p) for p in path.resolve().rglob('.')
-            if '.git' not in str(p).split(os.sep)
+            str(p)
+            for p in path.resolve().rglob("*")
+            if ".git" not in str(p).split(os.sep)
         ]
         output = os.linesep.join(filepaths)
-        return plug.HookResult(
-            hook=PLUGIN_NAME, status=plug.Status.SUCCESS, msg=output)
+        return plug.HookResult(hook=PLUGIN_NAME, status=plug.Status.SUCCESS, msg=output)
 
 
 @plug.repobee_hook
@@ -56,4 +57,5 @@ def act_on_cloned_repo(path: Union[str, pathlib.Path], api) -> plug.HookResult:
     return plug.HookResult(
         hook=PLUGIN_NAME,
         status=plug.Status.ERROR,
-        msg="This plugin is not implemented.")
+        msg="This plugin is not implemented.",
+    )
