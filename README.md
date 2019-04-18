@@ -10,7 +10,7 @@ so you can install it with `pip install cookiecutter` (or whichever variation
 works for you).
 
 ## Quick-use
-1. Execute `python3 -m cookicutter gh:repobee/repobee-plugin-cookiecutter`
+1. Execute `python3 -m cookiecutter gh:repobee/repobee-plugin-cookiecutter`
 2. Complete the setup.
 3. That's all there is to it! You should now have a directory called
    `repobee-<plugin_name>` in the current working directory.
