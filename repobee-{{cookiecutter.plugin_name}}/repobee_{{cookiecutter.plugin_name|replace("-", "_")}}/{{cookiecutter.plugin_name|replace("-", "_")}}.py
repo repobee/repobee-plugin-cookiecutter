@@ -24,13 +24,13 @@ class ExamplePlugin(plug.Plugin):
     """Example plugin that implements the act_on_cloned_repo hook."""
 
     def act_on_cloned_repo(
-        self, path: Union[str, pathlib.Path], api
+        self, path: Union[str, pathlib.Path], api: plug.API
     ) -> plug.HookResult:
         """List all files in a cloned repo.
         
         Args:
             path: Path to the student repo.
-            api: An instance of :py:class:`repobee.github_api.GitHubAPI`.
+            api: An instance of :py:class:`repobee_plug.API`.
         Returns:
             a plug.HookResult specifying the outcome.
         """
@@ -45,12 +45,12 @@ class ExamplePlugin(plug.Plugin):
 
 
 @plug.repobee_hook
-def act_on_cloned_repo(path: Union[str, pathlib.Path], api) -> plug.HookResult:
+def act_on_cloned_repo(path: Union[str, pathlib.Path], api: plug.API) -> plug.HookResult:
     """Return an error hookresult with a garbage message.
     
     Args:
         path: Path to the student repo.
-            api: An instance of :py:class:`repobee.github_api.GitHubAPI`.
+        api: An instance of :py:class:`repobee_plug.API`.
     Returns:
         a plug.HookResult specifying the outcome.
     """
