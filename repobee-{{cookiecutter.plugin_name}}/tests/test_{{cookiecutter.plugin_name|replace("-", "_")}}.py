@@ -1,4 +1,4 @@
-from repobee import plugin
+from _repobee import plugin
 
 from repobee_{{cookiecutter.plugin_name|replace("-", "_")}} import {{cookiecutter.plugin_name|replace("-", "_")}}
 
