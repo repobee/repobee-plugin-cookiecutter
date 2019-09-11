@@ -45,7 +45,9 @@ class ExamplePlugin(plug.Plugin):
 
 
 @plug.repobee_hook
-def act_on_cloned_repo(path: Union[str, pathlib.Path], api: plug.API) -> plug.HookResult:
+def act_on_cloned_repo(
+    path: Union[str, pathlib.Path], api: plug.API
+) -> plug.HookResult:
     """Return an error hookresult with a garbage message.
     
     Args:
