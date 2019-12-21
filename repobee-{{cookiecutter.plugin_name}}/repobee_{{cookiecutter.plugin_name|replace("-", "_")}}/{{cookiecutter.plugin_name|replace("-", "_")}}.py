@@ -9,8 +9,7 @@
 import pathlib
 import os
 
-{% if cookiecutter.generate_advanced_task %}
-import argparse
+{% if cookiecutter.generate_advanced_task == "yes" %}import argparse
 import configparser
 import re
 {% endif %}
@@ -22,8 +21,7 @@ PLUGIN_NAME = "{{cookiecutter.plugin_name}}"
 # if PLUGIN_NAMES does not contain any - characters, CONFIG_SECTION is not needed
 CONFIG_SECTION = "{{cookiecutter.plugin_name|replace("-", "_")}}" 
 
-{% if cookiecutter.generate_basic_task == "yes" %}
-# Basic Task plugin start
+{% if cookiecutter.generate_basic_task == "yes" %}# Basic Task plugin start
 def act(path: pathlib.Path, api: plug.API):
     """List all files in the repository at path.
 
@@ -42,8 +40,6 @@ def act(path: pathlib.Path, api: plug.API):
 
 # As listing files is not dependent on the type of the repo, we can add it both
 # as a clone task and as a setup task.
-
-
 @plug.repobee_hook
 def clone_task() -> plug.Task:
     """The clone_task hook executes after a student repository has been cloned,
@@ -68,15 +64,14 @@ def setup_task() -> plug.Task:
 # Basic Task plugin end
 {% endif %}
 
-{% if cookiecutter.generate_advanced_task == "yes" %}
-class AdvancedExamplePlugin(plug.Plugin):
+{% if cookiecutter.generate_advanced_task == "yes" %}class AdvancedExamplePlugin(plug.Plugin):
     """An advanced example Task plugin that in addition to acting on a
     repository also adds command line options and uses the config file.
     """
 
     def __init__(self):
         """Set default values for configuration options."""
-        self._ignore_pattern = None
+        self._pattern = None
 
     @plug.repobee_hook
     def clone_task(self) -> plug.Task:
@@ -121,10 +116,7 @@ class AdvancedExamplePlugin(plug.Plugin):
             str(p)
             for p in path.resolve().rglob("*")
             if ".git" not in str(p).split(os.sep)
-            and (
-                self._ignore_pattern is None
-                or re.match(self._ignore_pattern, str(p))
-            )
+            and (self._pattern is None or re.match(self._pattern, p.name))
         ]
         output = os.linesep.join(filepaths)
         return plug.HookResult(
@@ -138,7 +130,7 @@ class AdvancedExamplePlugin(plug.Plugin):
         )
 
     def _add_option(self, parser: argparse.ArgumentParser) -> None:
-        """Add the `--{{cookiecutter.plugin_name}}-ignore-pattern` command line option.
+        """Add the `--{{cookiecutter.plugin_name}}-pattern` command line option.
 
         Args:
             parser: An argument parser.
@@ -146,8 +138,9 @@ class AdvancedExamplePlugin(plug.Plugin):
         # note that options that are added to an existing parser should always
         # be prefixed with the name of the plugin
         parser.add_argument(
-            "--{{cookiecutter.plugin_name|replace("-", "_")}}-ignore-pattern",
-            help="A regex pattern. Filenames matching this pattern will be ignored.",
+            "--{{cookiecutter.plugin_name|replace("-", "_")}}-pattern",
+            help="A regex pattern to match against filenames. Only filenames "
+            "that match this pattern will be displayed.",
             type=str,
             default=None,
         )
@@ -159,9 +152,9 @@ class AdvancedExamplePlugin(plug.Plugin):
             args: Command line arguments that have been parsed and processed by
                 RepoBee's CLI.
         """
-        ignore_pattern_arg = args.{{cookiecutter.plugin_name|replace("-", "_")}}_ignore_pattern
-        if ignore_pattern_arg is not None:
-            self._ignore_pattern = ignore_pattern_arg
+        pattern_arg = args.{{cookiecutter.plugin_name|replace("-", "_")}}_pattern
+        if pattern_arg is not None:
+            self._pattern = pattern_arg
 
     def _handle_config(self, config_parser: configparser.ConfigParser) -> None:
         """Handle the config file.
@@ -172,7 +165,7 @@ class AdvancedExamplePlugin(plug.Plugin):
         if CONFIG_SECTION not in config_parser:
             return
 
-        self._ignore_pattern = config_parser.get(
-            CONFIG_SECTION, "{{cookiecutter.plugin_name|replace("-", "_")}}_ignore_pattern", fallback=self._ignore_pattern
+        self._pattern = config_parser.get(
+            CONFIG_SECTION, "pattern", fallback=self._pattern
         )
 {% endif %}
