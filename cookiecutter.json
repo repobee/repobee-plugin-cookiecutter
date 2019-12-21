@@ -3,5 +3,7 @@
     "email": "",
     "github_username": "",
     "plugin_name": "",
-    "short_description": ""
+    "short_description": "",
+    "generate_basic_task": ["no", "yes"],
+    "generate_advanced_task": ["no", "yes"]
 }
