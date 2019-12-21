@@ -6,7 +6,7 @@ with open("README.md", mode="r", encoding="utf-8") as f:
 
 # parse the version instead of importing it to avoid dependency-related crashes
 with open(
-    "repobee_{{cookiecutter.plugin_name|replace('-', '_')}}/__version.py",
+    "repobee_{{cookiecutter.plugin_name}}/__version.py",
     mode="r",
     encoding="utf-8",
 ) as f:

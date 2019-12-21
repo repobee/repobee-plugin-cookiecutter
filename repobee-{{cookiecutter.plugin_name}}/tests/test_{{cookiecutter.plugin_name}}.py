@@ -1,6 +1,6 @@
 from _repobee import plugin
 
-from repobee_{{cookiecutter.plugin_name|replace("-", "_")}} import {{cookiecutter.plugin_name|replace("-", "_")}}
+from repobee_{{cookiecutter.plugin_name}} import {{cookiecutter.plugin_name}}
 
 
 def test_register():

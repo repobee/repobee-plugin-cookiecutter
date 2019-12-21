@@ -17,9 +17,6 @@ import re
 import repobee_plug as plug
 
 PLUGIN_NAME = "{{cookiecutter.plugin_name}}"
-# CONFIG_SECTION is the same as PLUGIN_NAME, but with - characters replaced with _
-# if PLUGIN_NAMES does not contain any - characters, CONFIG_SECTION is not needed
-CONFIG_SECTION = "{{cookiecutter.plugin_name|replace("-", "_")}}" 
 
 {% if cookiecutter.generate_basic_task == "yes" %}# Basic Task plugin start
 def act(path: pathlib.Path, api: plug.API):
@@ -138,7 +135,7 @@ def setup_task() -> plug.Task:
         # note that options that are added to an existing parser should always
         # be prefixed with the name of the plugin
         parser.add_argument(
-            "--{{cookiecutter.plugin_name|replace("-", "_")}}-pattern",
+            "--{{cookiecutter.plugin_name}}-pattern",
             help="A regex pattern to match against filenames. Only filenames "
             "that match this pattern will be displayed.",
             type=str,
@@ -152,7 +149,7 @@ def setup_task() -> plug.Task:
             args: Command line arguments that have been parsed and processed by
                 RepoBee's CLI.
         """
-        pattern_arg = args.{{cookiecutter.plugin_name|replace("-", "_")}}_pattern
+        pattern_arg = args.{{cookiecutter.plugin_name}}_pattern
         if pattern_arg is not None:
             self._pattern = pattern_arg
 
@@ -162,10 +159,10 @@ def setup_task() -> plug.Task:
         Args:
             config_parser: The parsed config file.
         """
-        if CONFIG_SECTION not in config_parser:
+        if PLUGIN_NAME not in config_parser:
             return
 
         self._pattern = config_parser.get(
-            CONFIG_SECTION, "pattern", fallback=self._pattern
+            PLUGIN_NAME, "pattern", fallback=self._pattern
         )
 {% endif %}
