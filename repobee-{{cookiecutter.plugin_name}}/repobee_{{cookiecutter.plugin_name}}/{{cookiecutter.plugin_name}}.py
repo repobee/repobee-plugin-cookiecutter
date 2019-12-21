@@ -70,7 +70,6 @@ def setup_task() -> plug.Task:
         """Set default values for configuration options."""
         self._pattern = None
 
-    @plug.repobee_hook
     def clone_task(self) -> plug.Task:
         """The clone_task hook executes after a student repository has been cloned,
         and the path to the student repo is passed to the ``act`` callback.
@@ -80,8 +79,6 @@ def setup_task() -> plug.Task:
         """
         return self._create_task()
 
-
-    @plug.repobee_hook
     def setup_task(self) -> plug.Task:
         """The setup_task hook executes on master repos before they are pushed to
         student repos in the ``setup`` and ``update`` commands.
