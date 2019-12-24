@@ -14,3 +14,8 @@ works for you).
 2. Complete the setup.
 3. That's all there is to it! You should now have a directory called
    `repobee-<plugin_name>` in the current working directory.
+
+## Tutorial
+For an in-depth tutorial on this template, see the [repobee-plug creating
+plugins
+guide](https://repobee-plug.readthedocs.io/en/latest/creating_plugins.html)
