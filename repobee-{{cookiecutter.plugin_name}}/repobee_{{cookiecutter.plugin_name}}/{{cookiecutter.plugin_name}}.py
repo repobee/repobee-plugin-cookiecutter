@@ -91,12 +91,26 @@ def setup_task() -> plug.Task:
         """
         return self._create_task()
 
+    def config_hook(self, config_parser: configparser.ConfigParser) -> None:
+        """Handle the config file. The config hook is always invoked before any
+        of the Task hooks are invoked, so the side effects from this hook can
+        be used in e.g. the ``add_option`` callback.
+
+        Args:
+            config_parser: The parsed config file.
+        """
+        if PLUGIN_NAME not in config_parser:
+            return
+
+        self._pattern = config_parser.get(
+            PLUGIN_NAME, "pattern", fallback=self._pattern
+        )
+
     def _create_task(self):
         return plug.Task(
             act=self._act,
             add_option=self._add_option,
             handle_args=self._handle_args,
-            handle_config=self._handle_config,
         )
 
     def _act(self, path: pathlib.Path, api: plug.API) -> plug.HookResult:
@@ -138,7 +152,8 @@ def setup_task() -> plug.Task:
             help="A regex pattern to match against filenames. Only filenames "
             "that match this pattern will be displayed.",
             type=str,
-            default=None,
+            required=self._pattern is None, # required if not configured
+            default=self._pattern,
         )
 
     def _handle_args(self, args: argparse.Namespace) -> None:
@@ -148,22 +163,7 @@ def setup_task() -> plug.Task:
             args: Command line arguments that have been parsed and processed by
                 RepoBee's CLI.
         """
-        pattern_arg = args.{{cookiecutter.plugin_name}}_pattern
-        if pattern_arg is not None:
-            self._pattern = pattern_arg
-
-    def _handle_config(self, config_parser: configparser.ConfigParser) -> None:
-        """Handle the config file.
-
-        Args:
-            config_parser: The parsed config file.
-        """
-        if PLUGIN_NAME not in config_parser:
-            return
-
-        self._pattern = config_parser.get(
-            PLUGIN_NAME, "pattern", fallback=self._pattern
-        )
+        self._pattern = args.{{cookiecutter.plugin_name}}_pattern
 {% endif %}
 
 {% if cookiecutter.generate_basic_extension_command == "yes" %}
