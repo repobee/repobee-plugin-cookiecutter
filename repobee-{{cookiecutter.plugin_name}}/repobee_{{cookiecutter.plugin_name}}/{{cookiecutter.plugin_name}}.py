@@ -11,8 +11,10 @@ import os
 
 {% if cookiecutter.generate_advanced_task == "yes" %}import argparse
 import configparser
-import re
-{% endif %}
+import re{% endif %}
+{% if cookiecutter.generate_advanced_extension_command == "yes" or cookiecutter.generate_basic_extension_command == "yes" %}import argparse
+import configparser
+from typing import List, Mapping, Optional{% endif %}
 
 import repobee_plug as plug
 
@@ -161,5 +163,128 @@ def setup_task() -> plug.Task:
 
         self._pattern = config_parser.get(
             PLUGIN_NAME, "pattern", fallback=self._pattern
+        )
+{% endif %}
+
+{% if cookiecutter.generate_basic_extension_command == "yes" %}
+def callback(
+    args: argparse.Namespace, api: Optional[plug.API]
+) -> Optional[Mapping[str, List[plug.Result]]]:
+    """A hello world callback function.
+
+    Args:
+        args: Parsed and processed args from the RepoBee CLI.
+        api: A platform API instance (but expected to be None here).
+    Returns:
+        A mapping (str -> List[plug.Result]) that RepoBee's CLI can use for
+        output.
+    """
+    # do whatever you want to do!
+    return {
+        PLUGIN_NAME: [plug.Result(
+            name=PLUGIN_NAME, status=plug.Status.SUCCESS, msg="Hello, world!"
+        )]
+    }
+
+@plug.repobee_hook
+def create_extension_command() -> plug.ExtensionCommand:
+    """Create an extension command with no arguments.
+
+    Returns:
+        The extension command to add to the RepoBee CLI.
+    """
+    return plug.ExtensionCommand(
+        parser=plug.ExtensionParser(), # empty parser
+        name="example-command",
+        help="An example command.",
+        description="An example extension command.",
+        callback=callback,
+    )
+{% endif %}
+
+{% if cookiecutter.generate_advanced_extension_command == "yes" %}
+class AdvancedExtensionCommand(plug.Plugin):
+    """An advanced extension command with all of the features, including
+    command line options and configuration file options.
+
+    The command can be configured by adding the [{{cookiecutter.plugin_name}}]
+    section to the config file, and using the "name" and "age" options. For
+    example:
+
+    .. code-block:: none
+
+        [{{cookiecutter.plugin_name}}]
+        name = Some cool name
+        age = 38
+    """
+
+    def __init__(self):
+        self._name = None
+        self._age = None
+
+    def _callback(
+        self, args: argparse.Namespace, api: plug.API
+    ) -> Optional[Mapping[str, List[plug.Result]]]:
+        """A callback function that does nothing useful.
+
+        Args:
+            args: Parsed and processed args from the RepoBee CLI.
+            api: A platform API instance.
+        Returns:
+            A mapping (str -> List[plug.Result]) that RepoBee's CLI can use for
+            output.
+        """
+        # do whatever you want to do!
+        return {
+            PLUGIN_NAME: [plug.Result(
+                name=PLUGIN_NAME, status=plug.Status.SUCCESS, msg=str(args)
+            )]
+        }
+
+    def config_hook(self, config_parser: configparser.ConfigParser) -> None:
+        """Hook into the configuration file parsing.
+
+        Args:
+            config_parser: A configuration parser.
+        """
+        if PLUGIN_NAME not in config_parser:
+            return
+
+        self._name = config_parser.get(PLUGIN_NAME, "name", fallback=self._name)
+        self._age = config_parser.get(PLUGIN_NAME, "age", fallback=self._age)
+
+    def create_extension_command(self) -> plug.ExtensionCommand:
+        """Create an extension command.
+
+        Returns:
+            The extension command to add to the RepoBee CLI.
+        """
+        parser = plug.ExtensionParser()
+        parser.add_argument(
+            "-n",
+            "--name",
+            help="Your name.",
+            type=str,
+            required=self._name is None,
+            default=self._name
+        )
+        parser.add_argument(
+            "-a",
+            "--age",
+            help="Your age.",
+            type=int,
+            default=self._age,
+        )
+        return plug.ExtensionCommand(
+            parser=parser,
+            name="example-command",
+            help="An example command.",
+            description="An example extension command.",
+            callback=self._callback,
+            requires_api=True,
+            requires_base_parsers=[
+                plug.BaseParser.REPO_NAMES,
+                plug.BaseParser.STUDENTS,
+            ],
         )
 {% endif %}
