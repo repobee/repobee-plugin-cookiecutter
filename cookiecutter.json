@@ -1,11 +1,6 @@
 {
     "author": "",
     "email": "",
-    "github_username": "",
     "plugin_name": "",
-    "short_description": "",
-    "generate_basic_task": ["no", "yes"],
-    "generate_advanced_task": ["no", "yes"],
-    "generate_basic_extension_command": ["no", "yes"],
-    "generate_advanced_extension_command": ["no", "yes"]
+    "short_description": ""
 }
